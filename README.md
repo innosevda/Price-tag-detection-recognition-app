@@ -8,6 +8,14 @@ This is a mobile application that is being developed for visually impaired peopl
 - **Text Recognition (OCR)**: Extracts text from detected price tags using Optical Character Recognition (OCR) technology.
 - **User-Friendly Interface**: Simple, intuitive UI designed for easy navigation by visually impaired users.
 
+## Team Members
+- **Fidan Yusifova** and **Sevda Aliyeva** – Data Scientists
+  - Oversee how models work and ensure the efficient functioning of the model pipeline.
+
+- **Ibrahim Aliyev** and **Tural Gasimov** – Mobile Developers
+  - Responsible for mobile app development and integration of the model pipeline into the app.
+ 
+    
 ## Technologies Used
 - **Flutter** for cross-platform mobile app development.
 
