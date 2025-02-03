@@ -1,7 +1,0 @@
-{
-  "name": "SDP-I",
-  "integrations": {
-    "cordova": {}
-  },
-  "type": "custom"
-}
