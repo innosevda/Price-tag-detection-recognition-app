@@ -10,7 +10,7 @@
     <ImageView
         android:id="@+id/capturedImage"
         android:layout_width="match_parent"
-        android:layout_height="530dp"
+        android:layout_height="570dp"
         android:contentDescription="Pic"
         android:background="#000000"
         tools:ignore="HardcodedText" />
@@ -24,19 +24,6 @@
         android:layout_marginTop="5dp"
         android:padding="6dp"
         android:text="Capture"
-        android:textSize="18sp"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        tools:ignore="HardcodedText" />
-
-    <Button
-        android:id="@+id/processButton"
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="5dp"
-        android:padding="6dp"
-        android:text="Process"
         android:textSize="18sp"
         android:textColor="#FFFFFF"
         android:textStyle="bold"
