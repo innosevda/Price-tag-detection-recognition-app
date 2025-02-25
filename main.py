@@ -5,7 +5,6 @@ import subprocess
 from fastapi import FastAPI, UploadFile, File
 from starlette.responses import StreamingResponse
 
-
 app = FastAPI()
 
 class SDPAPP:
