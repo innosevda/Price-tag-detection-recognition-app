@@ -30,7 +30,7 @@ class SDPAPP:
             "espeak-ng",
             "-v", "az", # Azerbaijani language
             "-s", "180", # speed = 180
-            "-p", "50", # pitch = 50git
+            "-p", "50", # pitch = 50
             "-a", "200", # amplitude/volume = 200
             "--stdout",  # Output to stdout instead of a file
             text  # Text to convert to speech
