@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/bin/bash
 
 # Install espeak-ng
 sudo apt-get update && apt-get install -y espeak-ng
