@@ -24,6 +24,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            isDebuggable = false
         }
     }
     compileOptions {
@@ -64,5 +65,8 @@ dependencies {
 
     implementation(libs.google.http.client.android)
     implementation(libs.google.http.client.jackson2)
+
+    // Fast API
+    implementation(libs.okhttp)
 
 }

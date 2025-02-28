@@ -2,13 +2,13 @@ package com.example.sdp_i;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
+import android.media.MediaPlayer;
 import android.net.Uri;
-import android.os.Bundle;import android.os.Environment;
+import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 import android.widget.Button;
@@ -20,33 +20,29 @@ import androidx.core.content.FileProvider;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.Scope;
 import com.google.android.gms.tasks.Task;
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.googleapis.extensions.android.gms.auth.GoogleAccountCredential;
-import com.google.api.client.http.FileContent;
-import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.api.services.drive.DriveScopes;
-import com.google.api.services.drive.Drive;
 
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Collections;
 import java.util.Date;
 
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+
 /**
- * @noinspection deprecation
+ * @noinspection deprecation, CallToPrintStackTrace
  */
 public class MainActivity extends AppCompatActivity {
-
     private static final int REQUEST_IMAGE_CAPTURE = 1;
     private ImageView capturedImage;
     private String currentPhotoPath;
     private Bitmap currentBitmap;
+    private final String fastAPIUrl = "http://13.49.71.85";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,7 +61,6 @@ public class MainActivity extends AppCompatActivity {
         // Initialize UI elements
         capturedImage = findViewById(R.id.capturedImage);
         Button captureButton = findViewById(R.id.captureButton);
-        Button processButton = findViewById(R.id.processButton);
         Button uploadButton = findViewById(R.id.uploadButton);
 
         captureButton.setOnClickListener(v -> {
@@ -78,30 +73,23 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        processButton.setOnClickListener(v -> {
-            if (currentBitmap != null) {
-                Bitmap processedBitmap = processImage(currentBitmap);
-                capturedImage.setImageBitmap(processedBitmap);
-            } else {
-                Toast.makeText(this, "No image to process", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestEmail()
-                .requestScopes(new Scope(DriveScopes.DRIVE_FILE))
-                .build();
-        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
+//        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+//                .requestEmail()
+//                .requestScopes(new Scope(DriveScopes.DRIVE_FILE))
+//                .build();
+//        GoogleSignInClient googleSignInClient = GoogleSignIn.getClient(this, gso);
 
         uploadButton.setOnClickListener(v -> {
-            GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-            if (account == null) {
-                startActivityForResult(googleSignInClient.getSignInIntent(), 2);  // Request sign-in
-            } else {
-                uploadFileToDrive();
-            }
-        });
 
+            uploadFileToFastAPI();
+
+//            GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+//            if (account == null) {
+//                startActivityForResult(googleSignInClient.getSignInIntent(), 2);  // Request sign-in
+//            } else {
+//                uploadFileToDrive();
+//            }
+        });
 
     }
 
@@ -147,98 +135,127 @@ public class MainActivity extends AppCompatActivity {
 
         if (requestCode == 2) {
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            task.addOnSuccessListener(account -> uploadFileToDrive());
+            task.addOnSuccessListener(account -> uploadFileToFastAPI());
         }
 
     }
 
-    private void uploadFileToDrive() {
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
-        if (account == null) {
-            Toast.makeText(this, "Authentication failed", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
+    private void uploadFileToFastAPI() {
         new Thread(() -> {
             try {
-                // Initialize GoogleAccountCredential
-                GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(
-                        this,
-                        Collections.singletonList(DriveScopes.DRIVE_FILE)
-                );
-                credential.setSelectedAccount(account.getAccount());
+                // Get the image file you want to upload (here we assume it's a bitmap)
+                File file = createImageFile();
 
-                // Initialize the Drive service
-                Drive driveService = new Drive.Builder(
-                        AndroidHttp.newCompatibleTransport(),
-                        JacksonFactory.getDefaultInstance(),
-                        credential
-                ).setApplicationName("SDP-I").build();
-
-                // Retrieve current counter for naming files
-                SharedPreferences preferences = getSharedPreferences("uploadPrefs", MODE_PRIVATE);
-                int imageCounter = preferences.getInt("imageCounter", 1); // Default to 1 if not set
-                String fileName = "image_" + imageCounter + ".jpg";
-
-                // Increment the counter and save it
-                preferences.edit().putInt("imageCounter", imageCounter + 1).apply();
-
-                // Metadata for the file
-                com.google.api.services.drive.model.File fileMetadata = new com.google.api.services.drive.model.File();
-                fileMetadata.setName(fileName);
-                fileMetadata.setParents(Collections.singletonList("1wZYGu7CyULi3lNLoIUPCj32n6WsfWB4U")); // Specify the folder ID here
-
-                // Process the image if it hasn't been processed yet
-                if (currentBitmap != null) {
-                    currentBitmap = processImage(currentBitmap);
-                } else {
-                    runOnUiThread(() -> Toast.makeText(this, "No image to upload", Toast.LENGTH_SHORT).show());
-                    return;
-                }
-
-                // Convert the processed bitmap to a file
-                java.io.File filePath = new java.io.File(getFilesDir(), fileName);
-                FileOutputStream fos = new FileOutputStream(filePath);
-                currentBitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+                // Convert the bitmap to JPEG (if it's a bitmap)
+                FileOutputStream fos = new FileOutputStream(file);
+                currentBitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos); // currentBitmap is your image
                 fos.close();
 
-                // Upload the file
-                FileContent mediaContent = new FileContent("image/jpeg", filePath);
-                com.google.api.services.drive.model.File uploadedFile = driveService.files().create(fileMetadata, mediaContent)
-                        .setFields("id")
-                        .execute();
+                // Prepare the HTTP request body
+                OkHttpClient client = new OkHttpClient();
+                RequestBody requestBody = new MultipartBody.Builder()
+                        .setType(MultipartBody.FORM)
+                        .addFormDataPart("file", "image.jpeg",
+                                RequestBody.create(MediaType.parse("image/jpeg"), file))
+                        .build();
 
-                runOnUiThread(() -> Toast.makeText(this, "File uploaded! ID: " + uploadedFile.getId(), Toast.LENGTH_SHORT).show());
+                // Send the image to FastAPI at the specified URL
+                String url = fastAPIUrl+"/image/"; // FastAPI URL
+                Request request = new Request.Builder()
+                        .url(url)
+                        .post(requestBody)
+                        .build();
+
+                // Execute the request and get the response
+                client.newCall(request).execute();
+                playAudioFromBytes();
+
             } catch (Exception e) {
-                //noinspection CallToPrintStackTrace
                 e.printStackTrace();
-                runOnUiThread(() -> Toast.makeText(this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+                runOnUiThread(() -> Toast.makeText(this, "Error: " + e.getMessage(), Toast.LENGTH_SHORT).show());
             }
         }).start();
     }
 
+    // Method to play audio from byte array
+    private void playAudioFromBytes() {
+        try {
+            // Create MediaPlayer and play the audio file
+            MediaPlayer mediaPlayer = new MediaPlayer();
+            mediaPlayer.setDataSource(fastAPIUrl+"/audio/");
+            mediaPlayer.prepare();
+            mediaPlayer.start();
 
-    private Bitmap processImage(Bitmap original) {
-        // Get the width and height of the original bitmap
-        int width = original.getWidth();
-        int height = original.getHeight();
-
-        // Calculate the dimensions for the cropped center region (2x zoom)
-        int newWidth = width / 2;  // Cropping to 50% width
-        int newHeight = height / 2;  // Cropping to 50% height
-        int xOffset = (width - newWidth) / 2;  // Center horizontally
-        int yOffset = (height - newHeight) / 2;  // Center vertically
-
-        // Crop the bitmap to the center
-        Bitmap croppedBitmap = Bitmap.createBitmap(original, xOffset, yOffset, newWidth, newHeight);
-
-        // Scale the cropped bitmap back to original size (2x zoom)
-        Matrix matrix = new Matrix();
-        matrix.postScale(2.0f, 2.0f);  // Scaling factor is 2x
-
-        return Bitmap.createBitmap(croppedBitmap, 0, 0, croppedBitmap.getWidth(), croppedBitmap.getHeight(), matrix, true);
+        } catch (IOException e) {
+            e.printStackTrace();
+            runOnUiThread(() -> Toast.makeText(this, "Error playing audio", Toast.LENGTH_SHORT).show());
+        }
     }
 
+//    private void uploadFileToDrive() {
+//        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(this);
+//        if (account == null) {
+//            Toast.makeText(this, "Authentication failed", Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//        new Thread(() -> {
+//            try {
+//                // Initialize GoogleAccountCredential
+//                GoogleAccountCredential credential = GoogleAccountCredential.usingOAuth2(
+//                        this,
+//                        Collections.singletonList(DriveScopes.DRIVE_FILE)
+//                );
+//                credential.setSelectedAccount(account.getAccount());
+//
+//                // Initialize the Drive service
+//                Drive driveService = new Drive.Builder(
+//                        AndroidHttp.newCompatibleTransport(),
+//                        JacksonFactory.getDefaultInstance(),
+//                        credential
+//                ).setApplicationName("SDP-I").build();
+//
+//                // Retrieve current counter for naming files
+//                SharedPreferences preferences = getSharedPreferences("uploadPrefs", MODE_PRIVATE);
+//                int imageCounter = preferences.getInt("imageCounter", 1); // Default to 1 if not set
+//                String fileName = "image_" + imageCounter + ".jpg";
+//
+//                // Increment the counter and save it
+//                preferences.edit().putInt("imageCounter", imageCounter + 1).apply();
+//
+//                // Metadata for the file
+//                com.google.api.services.drive.model.File fileMetadata = new com.google.api.services.drive.model.File();
+//                fileMetadata.setName(fileName);
+//                fileMetadata.setParents(Collections.singletonList("1wZYGu7CyULi3lNLoIUPCj32n6WsfWB4U")); // Specify the folder ID here
+//
+//                // Process the image if it hasn't been processed yet
+//                if (currentBitmap != null) {
+//                    currentBitmap = processImage(currentBitmap);
+//                } else {
+//                    runOnUiThread(() -> Toast.makeText(this, "No image to upload", Toast.LENGTH_SHORT).show());
+//                    return;
+//                }
+//
+//                // Convert the processed bitmap to a file
+//                java.io.File filePath = new java.io.File(getFilesDir(), fileName);
+//                FileOutputStream fos = new FileOutputStream(filePath);
+//                currentBitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
+//                fos.close();
+//
+//                // Upload the file
+//                FileContent mediaContent = new FileContent("image/jpeg", filePath);
+//                com.google.api.services.drive.model.File uploadedFile = driveService.files().create(fileMetadata, mediaContent)
+//                        .setFields("id")
+//                        .execute();
+//
+//                runOnUiThread(() -> Toast.makeText(this, "File uploaded! ID: " + uploadedFile.getId(), Toast.LENGTH_SHORT).show());
+//            } catch (Exception e) {
+//                //noinspection CallToPrintStackTrace
+//                e.printStackTrace();
+//                runOnUiThread(() -> Toast.makeText(this, "Upload failed: " + e.getMessage(), Toast.LENGTH_SHORT).show());
+//            }
+//        }).start();
+//    }
 
     private void setPic() {
         // Get the dimensions of the screen

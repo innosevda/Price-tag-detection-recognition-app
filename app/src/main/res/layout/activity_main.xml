@@ -4,55 +4,40 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:padding="16dp">
+    android:padding="16dp"
+    tools:ignore="HardcodedText">
 
     <!-- ImageView for the preview (large screen area) -->
     <ImageView
         android:id="@+id/capturedImage"
         android:layout_width="match_parent"
-        android:layout_height="530dp"
+        android:layout_height="600dp"
         android:contentDescription="Pic"
-        android:background="#000000"
-        tools:ignore="HardcodedText" />
+        android:background="#000000" />
 
     <!-- Capture Button below the preview -->
     <Button
         android:id="@+id/captureButton"
-        android:layout_width="110dp"
+        android:layout_width="200sp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="5dp"
         android:padding="6dp"
         android:text="Capture"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        tools:ignore="HardcodedText" />
-
-    <Button
-        android:id="@+id/processButton"
-        android:layout_width="110dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="5dp"
-        android:padding="6dp"
-        android:text="Process"
-        android:textSize="18sp"
-        android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        tools:ignore="HardcodedText" />
+        android:textStyle="bold" />
 
     <Button
         android:id="@+id/uploadButton"
-        android:layout_width="110dp"
+        android:layout_width="200sp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:padding="6dp"
         android:text="Upload"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:textColor="#FFFFFF"
-        android:textStyle="bold"
-        tools:ignore="HardcodedText" />
+        android:textStyle="bold" />
 
 </LinearLayout>
