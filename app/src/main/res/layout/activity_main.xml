@@ -11,7 +11,11 @@
     <ImageView
         android:id="@+id/capturedImage"
         android:layout_width="match_parent"
+<<<<<<< HEAD
         android:layout_height="600dp"
+=======
+        android:layout_height="570dp"
+>>>>>>> a6f03352c2ee46111a173ab5a3b5287bd7a9ee6c
         android:contentDescription="Pic"
         android:background="#000000" />
 
@@ -26,7 +30,12 @@
         android:text="Capture"
         android:textSize="14sp"
         android:textColor="#FFFFFF"
+<<<<<<< HEAD
         android:textStyle="bold" />
+=======
+        android:textStyle="bold"
+        tools:ignore="HardcodedText" />
+>>>>>>> a6f03352c2ee46111a173ab5a3b5287bd7a9ee6c
 
     <Button
         android:id="@+id/uploadButton"

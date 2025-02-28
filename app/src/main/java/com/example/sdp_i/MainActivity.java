@@ -160,7 +160,11 @@ public class MainActivity extends AppCompatActivity {
                         .build();
 
                 // Send the image to FastAPI at the specified URL
+<<<<<<< HEAD
                 String url = fastAPIUrl+"/image/"; // FastAPI URL
+=======
+                String url = "http://192.168.1.86:8000/image/"; // FastAPI URL
+>>>>>>> a6f03352c2ee46111a173ab5a3b5287bd7a9ee6c
                 Request request = new Request.Builder()
                         .url(url)
                         .post(requestBody)
@@ -182,7 +186,11 @@ public class MainActivity extends AppCompatActivity {
         try {
             // Create MediaPlayer and play the audio file
             MediaPlayer mediaPlayer = new MediaPlayer();
+<<<<<<< HEAD
             mediaPlayer.setDataSource(fastAPIUrl+"/audio/");
+=======
+            mediaPlayer.setDataSource("http://192.168.1.86:8000/audio/");
+>>>>>>> a6f03352c2ee46111a173ab5a3b5287bd7a9ee6c
             mediaPlayer.prepare();
             mediaPlayer.start();
 
