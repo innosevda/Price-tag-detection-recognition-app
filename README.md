@@ -3,6 +3,10 @@
 ## Introduction
 This is a mobile application that is being developed for visually impaired people to read price tags in markets. By using the phone's camera, the application will scan price tags and voice the information for users, helping them make informed purchasing decisions.
 
+## Branches 
+### Model/Pipeline Branch: 
+This branch contains the model-related files for our mobile application. The models and preprocessing steps are stored in Google Colab notebooks, along with a folder containing example images for testing purposes.
+
 ## Features
 - **Price Tag Detection**: Uses the camera and barcode detection model to detect price tags in real-time.
 - **Text Recognition (OCR)**: Extracts text from detected price tags using Optical Character Recognition (OCR) technology.
