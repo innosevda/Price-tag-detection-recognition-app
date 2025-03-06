@@ -4,7 +4,7 @@
 This is a mobile application that is being developed for visually impaired people to read price tags in markets. By using the phone's camera, the application will scan price tags and voice the information for users, helping them make informed purchasing decisions.
 
 ## Branches 
-### Model/Pipeline Branch: 
+### model/pipeline: 
 This branch contains the model-related files for our mobile application. The models and preprocessing steps are stored in Google Colab notebooks, along with a folder containing example images for testing purposes.
 
 ## Features
