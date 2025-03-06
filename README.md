@@ -9,13 +9,13 @@ This branch contains the model-related files for our mobile application, which i
   - `PaddleOCR.ipynb` - Implements OCR (Optical Character Recognition) using PaddleOCR to extract price information from images.
   - Additional notebooks for testing and model experimentation.
 
-- **test_imgs/**
+- **test_images/**
   - A folder containing example images for testing the models.
 
 ## Usage
 1. Open `Preprocessing.ipynb` in Google Colab and run the cells to preprocess input images.
 2. Use `PaddleOCR.ipynb` to extract price information from the processed images.
-3. The test images in `test_imgs/` can be used to evaluate the effectiveness of the model.
+3. The test images in `test_images/` can be used to evaluate the effectiveness of the model.
 
 ## Future Improvements
 - Extracting other information (name of product and more).
