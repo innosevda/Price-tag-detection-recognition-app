@@ -36,4 +36,3 @@ The `--reload` flag enables auto-reloading for development.
 ---
 
 For any questions or issues, please contact tgasimov16051@ada.edu.az.
-
