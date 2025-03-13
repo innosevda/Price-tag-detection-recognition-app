@@ -1,29 +1,37 @@
-# A Mobile Application for Visually Impaired People to Read Price Tags
+# Preyes: Mobile App for Visually Impaired Users
 
-## Introduction
-This is a mobile application that is being developed for visually impaired people to read price tags in markets. By using the phone's camera, the application will scan price tags and voice the information for users, helping them make informed purchasing decisions.
-
-## Branches 
-### model/pipeline: 
-This branch contains the model-related files for our mobile application. The models and preprocessing steps are stored in Google Colab notebooks, along with a folder containing example images for testing purposes.
+## Overview
+Preyes is a mobile application designed to assist visually impaired individuals in reading price tags in markets. By utilizing the phone's camera, the app scans price tags and voices the information, enabling users to make informed purchasing decisions.
 
 ## Features
-- **Price Tag Detection**: Uses the camera and barcode detection model to detect price tags in real-time.
-- **Text Recognition (OCR)**: Extracts text from detected price tags using Optical Character Recognition (OCR) technology.
-- **User-Friendly Interface**: Simple, intuitive UI designed for easy navigation by visually impaired users.
+- **Real-time Price Tag Detection**: Uses the phone’s camera to capture and process price tag information.
+- **Voice Output**: Reads the detected price tag aloud for the user.
+- **User-Friendly Interface**: Simple and accessible design for seamless interaction.
 
-## Team Members
-- **Fidan Yusifova** and **Sevda Aliyeva** – Data Scientists
-  - Oversee how models work and ensure the efficient functioning of the model pipeline.
-
-- **Ibrahim Aliyev** and **Tural Gasimov** – Mobile Developers
-  - Responsible for mobile app development and integration of the model pipeline into the app.
- 
-    
-## Technologies Used
-- **Flutter** for cross-platform mobile app development.
+## Technology Stack
+- **Languages**: Java/Kotlin
+- **Platform**: Android
+- **Backend Integration**: Communicates with a FastAPI backend for image processing and response handling.
 
 ## Installation
-To run this project locally, follow these steps:
+To install and use Preyes, follow these steps:
 
-- Download the APK file in /app/release/app-release.apk
+### 1. Download the APK
+You can find the latest APK version at:
+```
+/app/release/app-release.apk
+```
+Download and install it on your Android device.
+
+### 2. Manual Usage Guide
+1. **Press the Capture Button**: Takes a picture of the price tag.
+2. **Press the Upload Button**: Sends the image to the backend and receives an audio response with the price information.
+
+## Future Enhancements
+- **Real-time scanning without manual capture**
+- **Multi-language support for broader accessibility**
+- **Enhanced OCR accuracy using AI models**
+
+---
+
+For any questions or issues, please contact tgasimov16051@ada.edu.az.
