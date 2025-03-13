@@ -17,8 +17,7 @@ To run the backend locally, follow these steps:
 
 ### 1. Clone the Repository
 ```sh
-git clone <repository-url>
-cd <repository-name>
+git clone -b fastapi --single-branch https://github.com/innosevda/Price-tag-detection-recognition-app
 ```
 
 ### 2. Install Dependencies
