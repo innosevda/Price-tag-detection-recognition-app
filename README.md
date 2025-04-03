@@ -1,29 +1,42 @@
 # A Mobile Application for Visually Impaired People to Read Price Tags
 
 ## Introduction
-This is a mobile application that is being developed for visually impaired people to read price tags in markets. By using the phone's camera, the application will scan price tags and voice the information for users, helping them make informed purchasing decisions.
+This mobile application is designed to assist visually impaired individuals in reading price tags while shopping. By using the phone's camera, the app scans price tags and provides voice feedback, enabling users to make informed purchasing decisions independently.
 
-## Branches 
-### model/pipeline: 
-This branch contains the model-related files for our mobile application. The models and preprocessing steps are stored in Google Colab notebooks, along with a folder containing example images for testing purposes.
+## Branches
+### `mobile`
+This branch contains all files related to the mobile application, including UI components, functionality, and the integration of the backend services. Start here to explore and run the mobile app.
+
+### `fastapi`
+This branch handles the server-side logic, including API endpoints used to process and return scanned text data to the mobile app. Visit this branch to run and configure the backend server.
+
+### `model/pipeline`
+Previously used for the computer vision model, this branch is now deprecated and has been replaced by Meta Llama for improved text recognition and processing.
 
 ## Features
-- **Price Tag Detection**: Uses the camera and barcode detection model to detect price tags in real-time.
-- **Text Recognition (OCR)**: Extracts text from detected price tags using Optical Character Recognition (OCR) technology.
-- **User-Friendly Interface**: Simple, intuitive UI designed for easy navigation by visually impaired users.
+- **Price Tag Detection**: Uses the phone's camera to detect and scan price tags.
+- **Text Recognition (OCR)**: Extracts text from price tags and converts it into readable data.
+- **Voice Feedback**: Reads out the scanned price tag information for the user.
+- **User-Friendly Interface**: Simple and intuitive UI designed for visually impaired users.
 
 ## Team Members
-- **Fidan Yusifova** and **Sevda Aliyeva** – Data Scientists
-  - Oversee how models work and ensure the efficient functioning of the model pipeline.
+- **Tural Gasimov** – Developer  
+  Responsible for full mobile and backend development, as well as the integration of all components.
 
-- **Ibrahim Aliyev** and **Tural Gasimov** – Mobile Developers
-  - Responsible for mobile app development and integration of the model pipeline into the app.
- 
-    
+- **Fidan Yusifova** and **Sevda Aliyeva** – Data Scientists  
+  Responsible for ensuring efficient text recognition and processing.
+
+- **Ibrahim Aliyev** – Research Writer  
+  Supports the project through documentation and research contributions.
+
 ## Technologies Used
-- **Flutter** for cross-platform mobile app development.
+- **Java/Kotlin** for Android mobile application development.
+- **Python/FastAPI** for backend server development.
+- **Meta Llama** for text recognition and processing.
+- **Amazon EWS** for server hosting and deployment.
+- **Android OS** as the target platform for the mobile application.
 
-## Installation
-To run this project locally, follow these steps:
-
-- Download the APK file in /app/release/app-release.apk
+## Usage
+Switch to the respective branches for more information and setup instructions:
+- Start with the `mobile` branch to access the mobile application.
+- Then move to the `fastapi` branch to configure and run the backend server.
